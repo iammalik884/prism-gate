@@ -5,7 +5,7 @@
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 BIFROST_DIR="${BIFROST_DIR:-$REPO/.deps/bifrost}"
-export PATH="/usr/local/go/bin:$PATH" CGO_ENABLED=1 GOWORK=off
+export PATH="/usr/local/go/bin:$PATH" CGO_ENABLED=1 GOWORK=off GOFLAGS=-mod=mod  # -mod=mod: upstream go.sum can lag; same go.sum is then used for the plugin
 mkdir -p "$REPO/build"
 
 echo "-- bifrost-http (dynamic)"

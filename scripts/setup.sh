@@ -3,7 +3,7 @@
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 BIFROST_DIR="${BIFROST_DIR:-$REPO/.deps/bifrost}"
-BIFROST_REF="${BIFROST_REF:-cbea98e6f1140cd4ec319ec6d21a20342a05326b}"   # pinned, tested commit (17 Nov 2026)
+BIFROST_REF="${BIFROST_REF:-transports/v2.5.1}"   # official release (10 Nov 2026)
 LOCAL_MODEL="${PRISM_LOCAL_MODEL:-qwen2.5:1.5b}"
 
 echo "== 1/5 Bifrost source ($BIFROST_REF)"
@@ -11,8 +11,8 @@ if [ ! -d "$BIFROST_DIR/.git" ]; then
   mkdir -p "$(dirname "$BIFROST_DIR")"
   git clone --filter=blob:none https://github.com/maximhq/bifrost.git "$BIFROST_DIR"
 fi
-git -C "$BIFROST_DIR" fetch --quiet origin "$BIFROST_REF" || true
-git -C "$BIFROST_DIR" checkout --quiet "$BIFROST_REF"
+git -C "$BIFROST_DIR" fetch --quiet origin tag "$BIFROST_REF" || git -C "$BIFROST_DIR" fetch --quiet origin "$BIFROST_REF" || true
+git -C "$BIFROST_DIR" checkout --quiet --force "$BIFROST_REF"
 
 echo "== 2/5 Go toolchain (the exact version Bifrost requires)"
 GO_WANT="$(awk '/^go /{print $2; exit}' "$BIFROST_DIR/transports/go.mod")"

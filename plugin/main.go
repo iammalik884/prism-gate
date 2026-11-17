@@ -92,7 +92,14 @@ func PreRequestHook(ctx *schemas.BifrostContext, req *schemas.BifrostRequest) er
 	if bd, err := bc.Decide(DecideRequest{Text: text, PriorityHint: d.Priority, Department: dept, Provider: string(provider), Model: model}); err == nil {
 		d = bd
 	} else {
-		ctx.Log(schemas.LogLevelWarn, "prism-gate: brain unavailable, keeping original route: "+err.Error())
+		// Fail closed for privacy: without the brain, keep the original route
+		// only if the local rules find no patient data.
+		d.Reason = "brain-unavailable"
+		fmt.Printf("[prism-gate] brain unavailable (%v), using local PHI rules\n", err)
+	}
+	if !d.PHI && localPHI(text) {
+		d.PHI = true
+		d.Reason += "+local-phi-rule"
 	}
 
 	switch {
@@ -107,7 +114,7 @@ func PreRequestHook(ctx *schemas.BifrostContext, req *schemas.BifrostRequest) er
 		req.SetModel(d.Model)
 	}
 	ctx.SetValue(ctxDecision, d)
-	ctx.Log(schemas.LogLevelInfo, fmt.Sprintf("prism-gate: priority=%s phi=%v -> %s/%s (%s)", d.Priority, d.PHI, d.Provider, d.Model, d.Reason))
+	fmt.Printf("[prism-gate] route priority=%s phi=%v -> %s/%s (%s)\n", d.Priority, d.PHI, d.Provider, d.Model, d.Reason)
 	return nil
 }
 

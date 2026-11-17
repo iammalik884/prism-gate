@@ -22,7 +22,7 @@
       "path": "__PRISM_PLUGIN_PATH__",
       "config": {
         "brain_url": "http://127.0.0.1:8090",
-        "brain_timeout_ms": 50,
+        "brain_timeout_ms": 150,
         "local_provider": "ollama",
         "local_model": "qwen2.5:1.5b",
         "max_concurrent": 8,
