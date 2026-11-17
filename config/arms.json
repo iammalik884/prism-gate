@@ -1,0 +1,8 @@
+{
+  "_note": "relative_cost is in relative units per 1k tokens (local = 0). Replace with real USD prices from each provider's pricing page before reporting costs in USD.",
+  "arms": [
+    {"provider": "groq",   "model": "llama-3.1-8b-instant",  "relative_cost": 1},
+    {"provider": "groq",   "model": "llama-3.3-70b-versatile", "relative_cost": 6},
+    {"provider": "gemini", "model": "gemini-2.5-flash",       "relative_cost": 3}
+  ]
+}

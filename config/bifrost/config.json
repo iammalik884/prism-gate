@@ -1,0 +1,34 @@
+{
+  "$schema": "https://www.getbifrost.ai/schema",
+  "config_store": { "enabled": false },
+  "providers": {
+    "ollama": {
+      "keys": [
+        { "name": "ollama-local", "value": "", "models": ["*"], "weight": 1.0,
+          "ollama_key_config": { "url": "http://127.0.0.1:11434" } }
+      ]
+    },
+    "groq": {
+      "keys": [ { "name": "groq-1", "value": "env.GROQ_API_KEY", "models": ["*"], "weight": 1.0 } ]
+    },
+    "gemini": {
+      "keys": [ { "name": "gemini-1", "value": "env.GEMINI_API_KEY", "models": ["*"], "weight": 1.0 } ]
+    }
+  },
+  "plugins": [
+    {
+      "enabled": true,
+      "name": "prism-gate",
+      "path": "__PRISM_PLUGIN_PATH__",
+      "config": {
+        "brain_url": "http://127.0.0.1:8090",
+        "brain_timeout_ms": 50,
+        "local_provider": "ollama",
+        "local_model": "qwen2.5:1.5b",
+        "max_concurrent": 8,
+        "emergency_reserved": 2,
+        "admit_timeout_ms": 20000
+      }
+    }
+  ]
+}

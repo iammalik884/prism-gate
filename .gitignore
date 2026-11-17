@@ -1,0 +1,10 @@
+.env
+.deps/
+build/
+.run/
+.bifrost/
+eval/logs/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.so
