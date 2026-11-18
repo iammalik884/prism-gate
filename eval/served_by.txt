@@ -1,0 +1,4 @@
+
+static served_by: {'openai/gpt-oss-120b': 17}
+
+prism served_by: {'openai/gpt-oss-20b': 78, 'qwen2.5:1.5b': 64, 'openai/gpt-oss-120b': 36, 'gemini-3.8-flash': 3}
