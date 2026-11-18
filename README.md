@@ -75,7 +75,7 @@ Brain: `POST /decide`, `POST /feedback`, `POST /verify`, `GET /stats`, `POST /ad
 
 ```bash
 python -m simulator.simulate --n 200 --mode static
-python -m simulator.simulate --n 200 --mode prism --outage-at 100 --outage-arm groq/llama-3.3-70b-versatile
+python -m simulator.simulate --n 200 --mode prism --outage-at 100 --outage-arm groq/openai/gpt-oss-120b
 python -m eval.metrics
 ```
 

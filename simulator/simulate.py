@@ -3,7 +3,7 @@
 Usage:
   python -m simulator.simulate --n 200 --mode prism            # through Bifrost + plugin
   python -m simulator.simulate --n 200 --mode static           # same prompts, plugin bypassed via header
-  python -m simulator.simulate --n 200 --outage-at 100 --outage-arm groq/llama-3.3-70b-versatile
+  python -m simulator.simulate --n 200 --outage-at 100 --outage-arm groq/openai/gpt-oss-120b
 
 Writes one JSON line per request to eval/logs/sim_<mode>.jsonl.
 """
@@ -79,7 +79,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=200)
     ap.add_argument("--mode", choices=["prism", "static"], default="prism")
-    ap.add_argument("--model", default="groq/llama-3.3-70b-versatile", help="model the app asks for")
+    ap.add_argument("--model", default="groq/openai/gpt-oss-120b", help="model the app asks for")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--outage-at", type=int, default=0, help="request index at which to disable an arm")

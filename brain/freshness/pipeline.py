@@ -21,7 +21,7 @@ from urllib.parse import urlparse
 import httpx
 
 BIFROST_URL = os.getenv("BIFROST_URL", "http://127.0.0.1:8080")
-CHECKER_MODEL = os.getenv("PRISM_CHECKER_MODEL", "groq/llama-3.1-8b-instant")
+CHECKER_MODEL = os.getenv("PRISM_CHECKER_MODEL", "groq/openai/gpt-oss-20b")
 
 TIME_SENSITIVE = {"price", "approval_status", "guideline", "safety_warning", "organisation", "api_version", "regulation"}
 
@@ -76,7 +76,7 @@ def _llm(messages: list[dict], timeout: float = 60.0) -> str:
     r = httpx.post(
         f"{BIFROST_URL}/v1/chat/completions",
         json={"model": CHECKER_MODEL, "messages": messages, "temperature": 0},
-        headers={"x-prism-priority": "routine"},
+        headers={"x-prism-priority": "routine", "x-prism-bypass": "1"},  # input is PHI-masked before /verify runs
         timeout=timeout,
     )
     r.raise_for_status()

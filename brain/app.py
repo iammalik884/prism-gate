@@ -20,7 +20,7 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-from .phi_guard import PHIGuard
+from .phi_guard import PHIGuard, mask
 from .router_linucb import LinUCBRouter, features, load_arms, reward
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -30,6 +30,7 @@ LOCAL_KEY = os.getenv("PRISM_LOCAL_ARM", "ollama/qwen2.5:1.5b")
 
 app = FastAPI(title="PRISM-Gate brain")
 guard = PHIGuard(use_presidio=os.getenv("PRISM_PRESIDIO", "1") == "1")
+guard.scan("warm up for Ahmed Raza in Lahore")  # load the NLP model now, not on the first request
 router = LinUCBRouter(load_arms(ARMS_FILE))
 pending: dict[str, dict] = {}            # decision id -> context for the reward update
 recent = deque(maxlen=500)               # recent decisions for the dashboard
@@ -140,7 +141,8 @@ def verify(body: VerifyIn):
 
     if not os.getenv("TAVILY_API_KEY"):
         raise HTTPException(500, "TAVILY_API_KEY is not set")
-    result = check_answer(body.answer, body.max_claims)
+    # The answer goes to Tavily and to cloud checkers: mask identifiers first.
+    result = check_answer(mask(body.answer), body.max_claims)
     _log({"type": "verify", "ts": time.time(), "overall": result["overall_score"], "checked": result["checked_claims"]})
     return result
 
